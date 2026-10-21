@@ -113,9 +113,14 @@ namespace ChatterinoNightlyUpdateChecker
                     }
 
                     if (authorName != "dependabot" && authorName != "dependabot[bot]")
-                        Console.WriteLine(
-                            (await PostDiscordMessage(client, timestamp, commitString, author, description))
-                            .StatusCode);
+                    {
+                        var discordResponse = await PostDiscordMessage(client, timestamp, commitString, author, description);
+                        Console.WriteLine(discordResponse.StatusCode);
+                        if (!discordResponse.IsSuccessStatusCode)
+                        {
+                            Console.WriteLine(await discordResponse.Content.ReadAsStringAsync());
+                        }
+                    }
                 }
 
                 if (fileNeedsUpdate) await File.WriteAllTextAsync("lastUpdatedValue", timestamp);
@@ -146,6 +151,10 @@ namespace ChatterinoNightlyUpdateChecker
             if (!string.IsNullOrEmpty(description))
             {
                 dcContent += $"\nDescription:\n```\n{description}\n```";
+            }
+            if (dcContent.Length >= 2000)
+            {
+                dcContent = dcContent.Substring(0, 1990) + "\n[...]\n```";
             }
 
             var webhookData = new WebhookData
