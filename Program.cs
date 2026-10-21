@@ -11,7 +11,7 @@ namespace ChatterinoNightlyUpdateChecker
         private const string WebhookAvatarUrl =
             "https://user-images.githubusercontent.com/41973452/272541622-52457e89-5f16-4c83-93e7-91866c25b606.png";
 
-        private const string NightlyLink = "https://github.com/Chatterino/chatterino2/releases/tag/nightly-build";
+        private const string NightlyLink = "https://github.com/Chatterino/chatterino/releases/tag/nightly-build";
 
         private const string ContentFormatString =
             "New Nightly Version (Updated: <t:{0}:F>):\nLatest Commit: {1} by {2}\nLink: <{3}>\nPull Request: {4}";
@@ -24,7 +24,7 @@ namespace ChatterinoNightlyUpdateChecker
             client.DefaultRequestHeaders.Add("User-Agent", "Wissididom/Chatterino-Nightly-Update-Checker");
             client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", "2026-03-10");
             var commits = JsonSerializer.Deserialize<ListCommitsResponse>(await client
-                .GetStringAsync("https://api.github.com/repos/Chatterino/chatterino2/commits?sha=nightly-build")
+                .GetStringAsync("https://api.github.com/repos/Chatterino/chatterino/commits?sha=nightly-build")
                 .ConfigureAwait(false));
             if (commits is null)
             {
@@ -143,7 +143,7 @@ namespace ChatterinoNightlyUpdateChecker
             if (match.Success)
             {
                 var prNumber = match.Groups[1].Value;
-                pr = $"[#{prNumber}](<https://github.com/Chatterino/chatterino2/pull/{prNumber}>)";
+                pr = $"[#{prNumber}](<https://github.com/Chatterino/chatterino/pull/{prNumber}>)";
             }
 
             Console.WriteLine(ContentFormatString, timestamp, commit, author, NightlyLink, pr);
